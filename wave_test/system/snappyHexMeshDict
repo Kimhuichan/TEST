@@ -18,7 +18,7 @@ FoamFile
 // Which of the steps to run
 castellatedMesh true;
 snap            true;
-addLayers       false;
+addLayers       true;
 
 
 // Geometry. Definition of all surfaces. All surfaces are of class
@@ -29,18 +29,18 @@ addLayers       false;
 // - to 'snap' the mesh boundary to the surface
 geometry
 {
-//    flange
-//    {
-//        type triSurfaceMesh;
-//        file "flange.stl";
-//    }
-
-    //- Refine a bit extra around the small centre hole
     Barge
     {
+        type triSurfaceMesh;
+        file "Barge.stl";
+    }
+
+    //- Refine a bit extra around the small centre hole
+    Box
+    {
         type searchableBox;
-	min ();
-	max ();
+	min (-20 -20 -5);
+	max (40 20 5);
     }
 };
 
@@ -85,9 +85,9 @@ castellatedMeshControls
     // This is a featureEdgeMesh, read from constant/triSurface for now.
     features
     (
-//        {
-//            file "flange.extendedFeatureEdgeMesh";
-//            level 0;
+        {
+            file "Barge.extendedFeatureEdgeMesh";
+            level 0;
         }
     );
 
@@ -104,11 +104,11 @@ castellatedMeshControls
 
     refinementSurfaces
     {
-//        flange
-//        {
-//            // Surface-wise min and max refinement level
-//            level (2 2);
-//        }
+        Barge
+        {
+            // Surface-wise min and max refinement level
+            level (2 2);
+        }
     }
 
     resolveFeatureAngle 30;
@@ -129,7 +129,7 @@ castellatedMeshControls
 
     refinementRegions
     {
-        Barge
+        Box
         {
             mode inside;
             levels ((1E15 3));
@@ -204,10 +204,10 @@ addLayersControls
     // Per final patch (so not geometry!) the layer information
     layers
     {
-//        "flange_.*"
-//        {
-//            nSurfaceLayers 1;
-//        }
+        "Barge_.*"
+        {
+            nSurfaceLayers 1;
+        }
     }
 
     // Expansion factor for layer mesh
